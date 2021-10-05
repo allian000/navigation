@@ -41,47 +41,34 @@ for now in line:
 #設起始點 startPoint = (198,52),目標點 endPoint = (479,251)
 startPoint = (198,52)
 endPoint = (479,251)
-# start_end=[]
-# start_end.append({'x':startPoint[0],'y':startPoint[1]})
-# start_end.append({'x':endPoint[0],'y':endPoint[1]})
-
-
-#找出x or y軸是否有相等，並且存到陣列
-isLinked = [] #這裡面都是跟起點同樣x或是y
-for pointer in point:
-    getPoint = {'x':pointer['x'],'y':pointer['y']}
-    if startPoint[0] == getPoint['x'] or startPoint[1] == getPoint['y']:
-        isLinked.append(getPoint)
-print(isLinked)
-
-
-#判斷要走x還是y
-#找出最近的兩個可走點
-pointDistance = []  #用來存點之間的距離
-way_1 = []
-way_2 = []
-temp = []
-if isLinked[0]['x'] == isLinked[1]['x']:
-    #這邊是x軸相同
-    print('x')
-    for i in isLinked:
-        pointDistance.append(i['y'] - startPoint[1])
-        for i in pointDistance:
-            temp.append(abs(i))
-    way_1.append(pointDistance[temp.index(min(temp))])
-else:
-    #這邊是y軸相同
-    for i in isLinked:
-        pointDistance.append(i['x'] - startPoint[0])
-        for i in pointDistance:
-            temp.append(abs(i))
-    way_1.append(pointDistance[temp.index(min(temp))])
-    
-
-
-#找出最小的兩個值的索引值
-# way_1 = pointDistance.pop(pointDistance.index(min(pointDistance)))
-# way_2 = pointDistance.pop(pointDistance.index(min(pointDistance)))
-print(way_1)
-# print(way_2)
-# print(pointDistance)
+#將終點塞到所有關聯點內
+point.append({'x':endPoint[0],'y':endPoint[1]})
+##################################################
+queue=[]
+seen=[]
+road=[]
+#起點先加進來
+s = {'x':startPoint[0],'y':startPoint[1]}
+queue.append(s)
+seen.append(s)
+#開始找相鄰的點
+#找x or y相同的放進暫存裡
+#BFS原則
+while (len(queue) > 0):
+    vertex = queue.pop(0)
+    #將所有與vertex相鄰的連接點放進來
+    link=[]
+    #離結點最近的可能是有連接?
+    for i in point:
+        if vertex['y'] == i['y'] or vertex['x'] == i['x']:
+            link.append(i)
+    nodes = link
+    for w in nodes:
+        if w not in seen:
+            queue.append(w)
+            seen.append(w)
+            if w['x'] == endPoint[0] and w['y'] == endPoint[1]:
+                break
+    road.append(vertex)
+for i in road:
+    print(i)
