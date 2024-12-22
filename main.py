@@ -1,3 +1,4 @@
+import os, errno
 import math
 import networkx as nx
 from PIL import Image, ImageDraw
@@ -116,6 +117,13 @@ def draw_shortest_path(image, path, map_id: str, output_path='shortest_path.png'
     """
     在圖片上繪製最短路徑，並保存結果。
     """
+    if not os.path.exists('./outputs'):
+        try:
+            os.makedirs('./outputs')
+        except OSError as exc:
+            if exc.errno != errno.EEXIST:
+                raise
+
     draw = ImageDraw.Draw(image)
     for i in range(len(path) - 1):
         p1 = (path[i].x, path[i].y)
